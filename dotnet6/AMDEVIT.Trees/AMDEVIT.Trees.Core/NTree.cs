@@ -53,6 +53,46 @@
 
         #region Methods
 
+        #region Traversal
+
+        public SortedList<int, NTreeNode<T>> GetLevelOrderTraversalList()
+        {
+            SortedList<int, NTreeNode<T>> sortedNodes = new SortedList<int, NTreeNode<T>>();
+            Queue<NTreeNode<T>> traversalQueue;
+            int order = 0;
+
+            if (this.Root == null)
+                return sortedNodes;
+
+            traversalQueue = new Queue<NTreeNode<T>>();
+            traversalQueue.Enqueue(this.Root);
+
+            while(traversalQueue.Count != 0)
+            {
+                int queueSize = traversalQueue.Count;
+
+                for (int i = 0; i < queueSize; i++)
+                {
+                    NTreeNode<T> currentNode = traversalQueue.Dequeue();    
+                    if (currentNode != null)
+                    {
+                        sortedNodes.Add(order, currentNode);
+                        order++;
+
+                        for (int k = 0; k < currentNode.Children.Length; k++)
+                        {
+                            NTreeNode<T> children = currentNode.Children[k];
+                            traversalQueue.Enqueue(children);   
+                        }
+                    }
+                }
+            }
+
+            return sortedNodes;
+        }
+
+        #endregion
+
         public static NTree<T> Create(T data)
         {
             NTree<T> tree;

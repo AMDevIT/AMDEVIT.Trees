@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AMDEVIT.Trees.Core
+﻿namespace AMDEVIT.Trees.Core
 {
     public class NTreeNode<T>
     {
@@ -71,7 +65,7 @@ namespace AMDEVIT.Trees.Core
 
         #region Methods
 
-        public void AddChild(T data)
+        public NTreeNode<T> AddChild(T data)
         {
             NTreeNode<T> newNode;
 
@@ -80,6 +74,7 @@ namespace AMDEVIT.Trees.Core
 
             newNode = new NTreeNode<T>(data, this);
             this.children.Add(newNode);
+            return newNode;
         }
 
         public bool RemoveChild(NTreeNode<T> child)
@@ -103,12 +98,61 @@ namespace AMDEVIT.Trees.Core
 
         public bool AttachChild(NTreeNode<T> child)
         {
-            throw new NotImplementedException();
+            bool result;
+
+            if (child == null)
+                throw new ArgumentNullException(nameof(child), "Child node cannot be null");
+
+            // Throw an exception or return false?
+
+            if (child.parent != null)
+                throw new InvalidOperationException("Child node already have a parent. Cannot attach the node.");
+
+            try
+            {
+                this.children.Add(child);
+                child.parent = this;
+                result = true;
+            }
+            catch(Exception exc)
+            {
+                _ = exc;
+                result = false;
+            }
+
+            return result;
         }
 
         public bool DetachChild(NTreeNode<T> child)
         {
-            throw new NotImplementedException();
+            bool result;
+
+            if (child == null)
+                throw new ArgumentNullException(nameof(child), "Child node cannot be null");
+
+            // Throw an exception or return false?
+
+            if (child.parent == null)
+                throw new InvalidOperationException("Child node does not have a parent. Cannot attach the node.");
+
+            if (child.parent != this)
+                result = false;
+            else
+            {
+                try
+                {
+                    this.children.Remove(child);
+                    child.parent = null;
+                    result = true;
+                }
+                catch (Exception exc)
+                {
+                    _ = exc;
+                    result = false;
+                }
+            }
+
+            return result;
         }
 
         #endregion
