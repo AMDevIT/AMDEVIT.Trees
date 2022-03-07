@@ -58,7 +58,7 @@
                 throw new ArgumentNullException(nameof(data), "Data cannot be null.");
     
             this.data = data;
-            this.parent = parent;
+            parent.AttachChild(this);
         }
 
         #endregion

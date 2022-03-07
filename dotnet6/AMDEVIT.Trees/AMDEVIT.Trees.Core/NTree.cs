@@ -53,6 +53,70 @@
 
         #region Methods
 
+        #region Manipulation
+
+        public NTreeNode<T> AddNode(T data)
+        {
+            NTreeNode<T> newNode = null;           
+
+            if (data == null)
+                throw new ArgumentNullException(nameof(data), "Data cannot be null.");
+
+            if (this.root == null)
+            {
+                newNode = new NTreeNode<T>(data);
+                this.root = newNode;
+            }
+            else
+            {
+                SortedList<int, NTreeNode<T>> levelTraversedElements;
+
+                levelTraversedElements = this.GetLevelOrderTraversalList();
+
+                if (levelTraversedElements != null && levelTraversedElements.Count != 0)
+                {
+                    int lastElementIndex = levelTraversedElements.Count;
+                    NTreeNode<T> lastElement = levelTraversedElements[lastElementIndex];
+
+                    if (lastElement != null)
+                        newNode = lastElement.AddChild(data);
+                }
+            }
+
+            return newNode;
+        }
+
+        public NTreeNode<T> AddNode(NTreeNode<T> parent, T data)
+        {
+            NTreeNode<T> newNode;
+
+            if (parent == null)            
+                throw new ArgumentNullException(nameof(parent), "Parent node cannot be null if a root element exists.");            
+
+            if (data == null)
+                throw new ArgumentNullException(nameof(data), "Data cannot be null.");
+            
+            newNode = parent.AddChild(data);
+
+            return newNode;
+        }
+
+        public bool RemoveNode(NTreeNode<T> parent, NTreeNode<T> child)
+        {
+            bool result;
+
+            if (parent == null)
+                throw new ArgumentNullException(nameof(parent), "Parent node cannot be null if a root element exists.");
+
+            if (child == null)
+                throw new ArgumentNullException(nameof(child), "Data cannot be null.");
+
+            result = parent.RemoveChild(child);
+            return result;
+        }
+
+        #endregion
+
         #region Traversal
 
         public SortedList<int, NTreeNode<T>> GetLevelOrderTraversalList()
