@@ -56,9 +56,10 @@
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data), "Data cannot be null.");
-    
+
             this.data = data;
-            parent.AttachChild(this);
+            if (parent != null)
+                parent.AttachChild(this);
         }
 
         #endregion
@@ -73,7 +74,7 @@
                 throw new ArgumentNullException(nameof(data), "Data cannot be null.");
 
             newNode = new NTreeNode<T>(data, this);
-            this.children.Add(newNode);
+            // this.children.Add(newNode);
             return newNode;
         }
 
@@ -85,7 +86,8 @@
 
             try
             {
-                this.children.Add(child);
+                child.parent = null;
+                this.children.Remove(child);
                 result = true;
             }
             catch(Exception exc)
