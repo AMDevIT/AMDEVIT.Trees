@@ -13,6 +13,7 @@ namespace AMDEVIT.Trees.TestConsole.Tests
         #region Fields
 
         private NTree<TestDataModel>? tree;
+        private TestDataModel hnln;
         private readonly List<TestDataModel> testData = new List<TestDataModel>();
 
         #endregion
@@ -27,11 +28,13 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             TestDataModel h1l3;
             TestDataModel h2l1;
             TestDataModel h2l2;
+            
             NTreeNode<TestDataModel> h1l1Node;
             NTreeNode<TestDataModel> h1l2Node;
             NTreeNode<TestDataModel> h1l3Node;
             NTreeNode<TestDataModel> h2l1Node;
-            NTreeNode<TestDataModel> h2l2Node;
+            NTreeNode<TestDataModel> h2l2Node;            
+            List<NTreeNode<TestDataModel>> nNodeList = new List<NTreeNode<TestDataModel>>();
 
 
             this.tree = NTree<TestDataModel>.Create(rootDataModel);
@@ -54,6 +57,26 @@ namespace AMDEVIT.Trees.TestConsole.Tests
 
             h2l1Node = this.tree.AddNode(h1l1Node, h2l1);            
             h2l2Node = this.tree.AddNode(h1l1Node, h2l2);
+
+            this.testData.Add(h2l1);
+            this.testData.Add(h2l2);
+
+            // HNLN
+            this.hnln = new TestDataModel("Sparse height, sparse leaf");
+
+            // H = 0
+
+            this.tree.AddNode(this.tree.Root, hnln);
+
+            // H = 1
+
+            h1l1Node.AddChild(this.hnln);
+
+            // H = 3
+
+            h2l2Node.AddChild(this.hnln);
+            h2l2Node.AddChild(this.hnln);
+            h2l2Node.AddChild(this.hnln);
         }
 
         public void Print()
@@ -61,6 +84,10 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             if (this.tree != null)
             {
                 SortedList<int, NTreeNode<TestDataModel>> sortedTraversalList = this.tree.LevelOrderTraversal();
+                TestDataModel searchDataModel;
+                TreeSearchOptions searchOptions;
+                NTreeNode<TestDataModel>[] foundNodes;
+                int searchElementIndex;
 
                 if (sortedTraversalList != null)
                 {
@@ -70,7 +97,41 @@ namespace AMDEVIT.Trees.TestConsole.Tests
                     }
                 }
 
-                // this.tree.Search()
+                searchElementIndex = Random.Shared.Next(0, this.testData.Count - 1);
+                searchDataModel = this.testData[searchElementIndex];
+                searchOptions = new TreeSearchOptions(TreeSearchMode.First);
+                Console.WriteLine($"Serching for {searchDataModel.Name} element in current tree.");
+                foundNodes = this.tree.Search(searchDataModel, searchOptions);
+                if (foundNodes != null)
+                    Console.WriteLine($"Found {foundNodes.Length} number of elements.");
+                else
+                    Console.WriteLine($"Found no elements.");
+
+                Console.WriteLine("Searching for data that's missing in the tree.");
+                searchDataModel = new TestDataModel("Not in tree data model.");
+
+                Console.WriteLine($"Serching for {searchDataModel.Name} element in current tree.");
+                foundNodes = this.tree.Search(searchDataModel, searchOptions);
+                if (foundNodes != null)
+                    Console.WriteLine($"Found {foundNodes.Length} number of elements.");
+                else
+                    Console.WriteLine($"Found no elements.");
+
+                Console.WriteLine($"Serching for multiple {this.hnln.Name} elements in current tree.");
+                searchOptions = new TreeSearchOptions(TreeSearchMode.AllMatches);
+                foundNodes = this.tree.Search(this.hnln, searchOptions);
+                if (foundNodes != null)
+                    Console.WriteLine($"Found {foundNodes.Length} number of elements.");
+                else
+                    Console.WriteLine($"Found no elements.");
+
+                Console.WriteLine($"Serching for first single {this.hnln.Name} elemente in current tree.");
+                searchOptions = new TreeSearchOptions(TreeSearchMode.First);
+                foundNodes = this.tree.Search(this.hnln, searchOptions);
+                if (foundNodes != null)
+                    Console.WriteLine($"Found {foundNodes.Length} number of elements.");
+                else
+                    Console.WriteLine($"Found no elements.");
             }
         }
 

@@ -11,5 +11,20 @@
         }
 
         #endregion
+
+        #region .ctor
+
+        public TreeSearchOptions()
+            : this(TreeSearchMode.AllMatches)
+        {
+           
+        }
+
+        public TreeSearchOptions(TreeSearchMode searchMode)
+        {
+            this.Mode = searchMode;
+        }
+
+        #endregion
     }
 }
