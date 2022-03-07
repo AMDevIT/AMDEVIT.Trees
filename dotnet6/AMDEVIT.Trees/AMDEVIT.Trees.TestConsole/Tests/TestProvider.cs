@@ -13,7 +13,7 @@ namespace AMDEVIT.Trees.TestConsole.Tests
         #region Fields
 
         private NTree<TestDataModel>? tree;
-        private TestDataModel hnln;
+        private TestDataModel? hnln;
         private readonly List<TestDataModel> testData = new List<TestDataModel>();
 
         #endregion
@@ -117,21 +117,27 @@ namespace AMDEVIT.Trees.TestConsole.Tests
                 else
                     Console.WriteLine($"Found no elements.");
 
-                Console.WriteLine($"Serching for multiple {this.hnln.Name} elements in current tree.");
+                Console.WriteLine($"Serching for multiple {this.hnln?.Name} elements in current tree.");
                 searchOptions = new TreeSearchOptions(TreeSearchMode.AllMatches);
-                foundNodes = this.tree.Search(this.hnln, searchOptions);
-                if (foundNodes != null)
-                    Console.WriteLine($"Found {foundNodes.Length} number of elements.");
-                else
-                    Console.WriteLine($"Found no elements.");
+                if (this.hnln != null)
+                {
+                    foundNodes = this.tree.Search(this.hnln, searchOptions);
+                    if (foundNodes != null)
+                        Console.WriteLine($"Found {foundNodes.Length} number of elements.");
+                    else
+                        Console.WriteLine($"Found no elements.");
+                }
 
-                Console.WriteLine($"Serching for first single {this.hnln.Name} elemente in current tree.");
+                Console.WriteLine($"Serching for first single {this.hnln?.Name} elemente in current tree.");
                 searchOptions = new TreeSearchOptions(TreeSearchMode.First);
-                foundNodes = this.tree.Search(this.hnln, searchOptions);
-                if (foundNodes != null)
-                    Console.WriteLine($"Found {foundNodes.Length} number of elements.");
-                else
-                    Console.WriteLine($"Found no elements.");
+                if (this.hnln != null)
+                {
+                    foundNodes = this.tree.Search(this.hnln, searchOptions);
+                    if (foundNodes != null)
+                        Console.WriteLine($"Found {foundNodes.Length} number of elements.");
+                    else
+                        Console.WriteLine($"Found no elements.");
+                }
             }
         }
 
