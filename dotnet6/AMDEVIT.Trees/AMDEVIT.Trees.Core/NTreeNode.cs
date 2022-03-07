@@ -1,6 +1,7 @@
 ﻿namespace AMDEVIT.Trees.Core
 {
     public class NTreeNode<T>
+        where T : class
     {
         #region Fields
 
@@ -20,7 +21,7 @@
             }
         }
 
-        public T Data
+        public T Value
         {
             get
             {
@@ -47,17 +48,17 @@
 
         #region .ctor
 
-        public NTreeNode(T data)
-            : this(data, null)
+        public NTreeNode(T value)
+            : this(value, null)
         {   
         }
 
-        protected NTreeNode(T data, NTreeNode<T> parent)
+        protected NTreeNode(T value, NTreeNode<T> parent)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data), "Data cannot be null.");
+            if (value == null)
+                throw new ArgumentNullException(nameof(value), "Value cannot be null.");
 
-            this.data = data;
+            this.data = value;
             if (parent != null)
                 parent.AttachChild(this);
         }
@@ -66,14 +67,14 @@
 
         #region Methods
 
-        public NTreeNode<T> AddChild(T data)
+        public NTreeNode<T> AddChild(T value)
         {
             NTreeNode<T> newNode;
 
-            if (data == null)
-                throw new ArgumentNullException(nameof(data), "Data cannot be null.");
+            if (value == null)
+                throw new ArgumentNullException(nameof(value), "Value cannot be null.");
 
-            newNode = new NTreeNode<T>(data, this);
+            newNode = new NTreeNode<T>(value, this);
             // this.children.Add(newNode);
             return newNode;
         }

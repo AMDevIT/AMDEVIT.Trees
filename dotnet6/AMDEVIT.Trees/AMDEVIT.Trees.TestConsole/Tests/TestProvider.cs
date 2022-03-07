@@ -12,7 +12,8 @@ namespace AMDEVIT.Trees.TestConsole.Tests
     {
         #region Fields
 
-        private NTree<TestDataModel> tree;
+        private NTree<TestDataModel>? tree;
+        private readonly List<TestDataModel> testData = new List<TestDataModel>();
 
         #endregion
 
@@ -43,6 +44,10 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             h1l2Node = this.tree.AddNode(this.tree.Root, h1l2);
             h1l3Node = this.tree.AddNode(this.tree.Root, h1l3);
 
+            this.testData.Add(h1l1);
+            this.testData.Add(h1l2);
+            this.testData.Add(h1l3);
+
             // H2 
             h2l1 = new TestDataModel("Height 2, leaf 1");
             h2l2 = new TestDataModel("Height 2, leaf 2");
@@ -55,15 +60,17 @@ namespace AMDEVIT.Trees.TestConsole.Tests
         {
             if (this.tree != null)
             {
-                SortedList<int, NTreeNode<TestDataModel>> sortedTraversalList = this.tree.GetLevelOrderTraversalList();
+                SortedList<int, NTreeNode<TestDataModel>> sortedTraversalList = this.tree.LevelOrderTraversal();
 
                 if (sortedTraversalList != null)
                 {
                     foreach(KeyValuePair<int, NTreeNode<TestDataModel>> currentElement in sortedTraversalList)
                     {
-                        Console.WriteLine($"Index: {currentElement.Key}, Data {currentElement.Value.Data?.ToString()}");
+                        Console.WriteLine($"Index: {currentElement.Key}, Data {currentElement.Value.Value?.ToString()}");
                     }
                 }
+
+                // this.tree.Search()
             }
         }
 
