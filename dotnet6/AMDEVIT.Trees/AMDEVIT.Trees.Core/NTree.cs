@@ -4,22 +4,22 @@ using System.Collections.Generic;
 namespace AMDEVIT.Trees.Core
 {
     public class NTree<T>
-        where T : class
+       where T : class
     {
         #region Fields
 
-        private NTreeNode<T> root;
+        private INTreeNode<T> root;
 
         #endregion
 
         #region Properties
 
-        public NTreeNode<T> Root
+        public INTreeNode<T> Root
         {
-            get 
-            { 
-                return this.root; 
-            }    
+            get
+            {
+                return this.root;
+            }
         }
 
         #endregion
@@ -32,17 +32,17 @@ namespace AMDEVIT.Trees.Core
         }
 
         public NTree(T data)
-        {   
+        {
             NTreeNode<T> node;
 
             if (data == null)
                 throw new ArgumentNullException(nameof(data), "Data cannot be null");
 
-            node = new NTreeNode<T>(data);  
-            this.root = node;   
+            node = new NTreeNode<T>(data);
+            this.root = node;
         }
 
-        public NTree(NTreeNode<T> root)
+        public NTree(INTreeNode<T> root)
         {
             if (root == null)
                 throw new ArgumentNullException(nameof(root), "Root element cannot be null");
@@ -50,7 +50,7 @@ namespace AMDEVIT.Trees.Core
             if (root.Parent != null)
                 throw new InvalidOperationException("Provided node element already assigned to a parent.");
 
-            this.root = root;   
+            this.root = root;
         }
 
         #endregion
@@ -59,9 +59,9 @@ namespace AMDEVIT.Trees.Core
 
         #region Manipulation
 
-        public NTreeNode<T> AddNode(T data)
+        public virtual INTreeNode<T> AddNode(T data)
         {
-            NTreeNode<T> newNode = null;           
+            INTreeNode<T> newNode = null;
 
             if (data == null)
                 throw new ArgumentNullException(nameof(data), "Data cannot be null.");
@@ -73,14 +73,14 @@ namespace AMDEVIT.Trees.Core
             }
             else
             {
-                SortedList<int, NTreeNode<T>> levelTraversedElements;
+                SortedList<int, INTreeNode<T>> levelTraversedElements;
 
                 levelTraversedElements = this.LevelOrderTraversal();
 
                 if (levelTraversedElements != null && levelTraversedElements.Count != 0)
                 {
                     int lastElementIndex = levelTraversedElements.Count;
-                    NTreeNode<T> lastElement = levelTraversedElements[lastElementIndex];
+                    INTreeNode<T> lastElement = levelTraversedElements[lastElementIndex];
 
                     if (lastElement != null)
                         newNode = lastElement.AddChild(data);
@@ -90,22 +90,55 @@ namespace AMDEVIT.Trees.Core
             return newNode;
         }
 
-        public NTreeNode<T> AddNode(NTreeNode<T> parent, T data)
+        protected virtual bool AddNode(INTreeNode<T> newNode)
         {
-            NTreeNode<T> newNode;
+            bool result = false;
 
-            if (parent == null)            
-                throw new ArgumentNullException(nameof(parent), "Parent node cannot be null if a root element exists.");            
+            if (newNode == null)
+                throw new ArgumentNullException(nameof(newNode), "Node cannot be null.");
+
+            if (this.root == null)
+            {
+                this.root = newNode;
+                result = true;
+            }
+            else
+            {
+                SortedList<int, INTreeNode<T>> levelTraversedElements;
+
+                levelTraversedElements = this.LevelOrderTraversal();
+
+                if (levelTraversedElements != null && levelTraversedElements.Count != 0)
+                {
+                    int lastElementIndex = levelTraversedElements.Count;
+                    INTreeNode<T> lastElement = levelTraversedElements[lastElementIndex];
+
+                    if (lastElement != null)
+                    {
+                        result = lastElement.AttachChild(newNode);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public virtual INTreeNode<T> AddNode(INTreeNode<T> parent, T data)
+        {
+            INTreeNode<T> newNode;
+
+            if (parent == null)
+                throw new ArgumentNullException(nameof(parent), "Parent node cannot be null if a root element exists.");
 
             if (data == null)
                 throw new ArgumentNullException(nameof(data), "Data cannot be null.");
-            
+
             newNode = parent.AddChild(data);
 
             return newNode;
         }
 
-        public bool RemoveNode(NTreeNode<T> parent, NTreeNode<T> child)
+        public bool RemoveNode(INTreeNode<T> parent, INTreeNode<T> child)
         {
             bool result;
 
@@ -123,11 +156,11 @@ namespace AMDEVIT.Trees.Core
 
         #region Traversal and search
 
-        public NTreeNode<T>[] Search(T data, TreeSearchOptions options)
+        public INTreeNode<T>[] Search(T data, TreeSearchOptions options)
         {
-            SortedList<int, NTreeNode<T>> sortedList;
-            List<NTreeNode<T>> foundList = new List<NTreeNode<T>>();
-            NTreeNode<T>[] foundElements;
+            SortedList<int, INTreeNode<T>> sortedList;
+            List<INTreeNode<T>> foundList = new List<INTreeNode<T>>();
+            INTreeNode<T>[] foundElements;
 
             if (options == null)
                 options = new TreeSearchOptions();
@@ -142,12 +175,12 @@ namespace AMDEVIT.Trees.Core
                         foundList.AddRange(sortedList.Values);
                         break;
 
-                    case TreeSearchMode.First:                        
+                    case TreeSearchMode.First:
                         if (sortedList.Count > 0)
                             foundList.Add(sortedList[0]);
                         break;
 
-                    case TreeSearchMode.Last:                
+                    case TreeSearchMode.Last:
                         if (sortedList.Count > 0)
                         {
                             int lastIndex = sortedList.Count - 1;
@@ -155,30 +188,30 @@ namespace AMDEVIT.Trees.Core
                         }
                         break;
                 }
-            }            
+            }
 
             foundElements = foundList.ToArray();
             return foundElements;
         }
 
-        public SortedList<int, NTreeNode<T>> LevelOrderTraversal()
+        public SortedList<int, INTreeNode<T>> LevelOrderTraversal()
         {
-            SortedList<int, NTreeNode<T>> sortedNodes;
+            SortedList<int, INTreeNode<T>> sortedNodes;
 
             sortedNodes = this.LevelOrderTraversal(false, null);
             return sortedNodes;
         }
 
-        protected SortedList<int, NTreeNode<T>> LevelOrderTraversal(bool search, T value)
+        protected virtual SortedList<int, INTreeNode<T>> LevelOrderTraversal(bool search, T value)
         {
-            SortedList<int, NTreeNode<T>> sortedNodes = new SortedList<int, NTreeNode<T>>();
-            Queue<NTreeNode<T>> traversalQueue;
+            SortedList<int, INTreeNode<T>> sortedNodes = new SortedList<int, INTreeNode<T>>();
+            Queue<INTreeNode<T>> traversalQueue;
             int order = 0;
 
             if (this.Root == null)
                 return sortedNodes;
 
-            traversalQueue = new Queue<NTreeNode<T>>();
+            traversalQueue = new Queue<INTreeNode<T>>();
             traversalQueue.Enqueue(this.Root);
 
             while (traversalQueue.Count != 0)
@@ -187,12 +220,12 @@ namespace AMDEVIT.Trees.Core
 
                 for (int i = 0; i < queueSize; i++)
                 {
-                    NTreeNode<T> currentNode = traversalQueue.Dequeue();
+                    INTreeNode<T> currentNode = traversalQueue.Dequeue();
                     if (currentNode != null)
                     {
                         bool found = false;
 
-                        if (search == false)                        
+                        if (search == false)
                             found = true;
                         else
                         {
@@ -208,8 +241,9 @@ namespace AMDEVIT.Trees.Core
 
                         for (int k = 0; k < currentNode.Children.Length; k++)
                         {
-                            NTreeNode<T> children = currentNode.Children[k];
-                            traversalQueue.Enqueue(children);
+                            NTreeNode<T> children = currentNode.Children[k] as NTreeNode<T>;
+                            if (children != null)
+                                traversalQueue.Enqueue(children);
                         }
                     }
                 }
@@ -224,8 +258,8 @@ namespace AMDEVIT.Trees.Core
         {
             NTree<T> tree;
 
-            if (data == null)   
-                throw new ArgumentNullException(nameof(data), "Data cannot be null");    
+            if (data == null)
+                throw new ArgumentNullException(nameof(data), "Data cannot be null");
 
             tree = new NTree<T>(data);
             return tree;

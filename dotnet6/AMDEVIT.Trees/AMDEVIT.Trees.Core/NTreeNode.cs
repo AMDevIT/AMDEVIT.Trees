@@ -4,23 +4,28 @@ using System.Collections.Generic;
 namespace AMDEVIT.Trees.Core
 {
     public class NTreeNode<T>
+        : INTreeNode<T>
         where T : class
     {
         #region Fields
 
-        private T data;        
-        private NTreeNode<T> parent;
-        private readonly List<NTreeNode<T>> children = new List<NTreeNode<T>>();
+        private T data;
+        private INTreeNode<T> parent;
+        protected readonly List<INTreeNode<T>> children = new List<INTreeNode<T>>();
 
         #endregion
 
         #region Properties
 
-        public NTreeNode<T> Parent
+        public INTreeNode<T> Parent
         {
             get
             {
-                return parent;  
+                return parent;
+            }
+            protected set
+            {
+                this.parent = value;
             }
         }
 
@@ -32,16 +37,16 @@ namespace AMDEVIT.Trees.Core
             }
             protected set
             {
-                this.data = value;  
+                this.data = value;
             }
         }
 
-        public NTreeNode<T>[] Children
+        public INTreeNode<T>[] Children
         {
             get
             {
-                NTreeNode<T>[] result;
-                                
+                INTreeNode<T>[] result;
+
                 result = this.children.ToArray();
                 return result;
             }
@@ -53,7 +58,7 @@ namespace AMDEVIT.Trees.Core
 
         public NTreeNode(T value)
             : this(value, null)
-        {   
+        {
         }
 
         protected NTreeNode(T value, NTreeNode<T> parent)
@@ -70,7 +75,7 @@ namespace AMDEVIT.Trees.Core
 
         #region Methods
 
-        public NTreeNode<T> AddChild(T value)
+        public virtual INTreeNode<T> AddChild(T value)
         {
             NTreeNode<T> newNode;
 
@@ -78,23 +83,29 @@ namespace AMDEVIT.Trees.Core
                 throw new ArgumentNullException(nameof(value), "Value cannot be null.");
 
             newNode = new NTreeNode<T>(value, this);
-            // this.children.Add(newNode);
             return newNode;
         }
 
-        public bool RemoveChild(NTreeNode<T> child)
+        public virtual bool RemoveChild(INTreeNode<T> child)
         {
             bool result = false;
+
             if (child == null)
                 throw new ArgumentNullException(nameof(child), "Child element cannot be null.");
 
             try
             {
-                child.parent = null;
+                if (child is NTreeNode<T>)
+                {
+                    NTreeNode<T> currentNode = child as NTreeNode<T>;
+                    if (currentNode != null)
+                        currentNode.parent = null;
+                }
+
                 this.children.Remove(child);
                 result = true;
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 _ = exc;
             }
@@ -102,25 +113,29 @@ namespace AMDEVIT.Trees.Core
             return result;
         }
 
-        public bool AttachChild(NTreeNode<T> child)
+        public virtual bool AttachChild(INTreeNode<T> child)
         {
+            NTreeNode<T> currentNode = null;
             bool result;
 
             if (child == null)
                 throw new ArgumentNullException(nameof(child), "Child node cannot be null");
 
+            if (child is NTreeNode<T>)
+                currentNode = child as NTreeNode<T>;
+
             // Throw an exception or return false?
 
-            if (child.parent != null)
+            if (currentNode != null && currentNode.parent != null)
                 throw new InvalidOperationException("Child node already have a parent. Cannot attach the node.");
 
             try
             {
                 this.children.Add(child);
-                child.parent = this;
+                currentNode.parent = this;
                 result = true;
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 _ = exc;
                 result = false;
@@ -129,26 +144,30 @@ namespace AMDEVIT.Trees.Core
             return result;
         }
 
-        public bool DetachChild(NTreeNode<T> child)
+        public virtual bool DetachChild(INTreeNode<T> child)
         {
+            NTreeNode<T> currentNode = null;
             bool result;
 
             if (child == null)
                 throw new ArgumentNullException(nameof(child), "Child node cannot be null");
 
+            if (child is NTreeNode<T>)
+                currentNode = child as NTreeNode<T>;
+
             // Throw an exception or return false?
 
-            if (child.parent == null)
+            if (currentNode.parent == null)
                 throw new InvalidOperationException("Child node does not have a parent. Cannot attach the node.");
 
-            if (child.parent != this)
+            if (currentNode.parent != this)
                 result = false;
             else
             {
                 try
                 {
                     this.children.Remove(child);
-                    child.parent = null;
+                    currentNode.parent = null;
                     result = true;
                 }
                 catch (Exception exc)

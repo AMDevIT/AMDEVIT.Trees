@@ -29,12 +29,12 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             TestDataModel h2l1;
             TestDataModel h2l2;
             
-            NTreeNode<TestDataModel> h1l1Node;
-            NTreeNode<TestDataModel> h1l2Node;
-            NTreeNode<TestDataModel> h1l3Node;
-            NTreeNode<TestDataModel> h2l1Node;
-            NTreeNode<TestDataModel> h2l2Node;            
-            List<NTreeNode<TestDataModel>> nNodeList = new List<NTreeNode<TestDataModel>>();
+            INTreeNode<TestDataModel> h1l1Node;
+            INTreeNode<TestDataModel> h1l2Node;
+            INTreeNode<TestDataModel> h1l3Node;
+            INTreeNode<TestDataModel> h2l1Node;
+            INTreeNode<TestDataModel> h2l2Node;            
+            List<INTreeNode<TestDataModel>> nNodeList = new List<INTreeNode<TestDataModel>>();
 
 
             this.tree = NTree<TestDataModel>.Create(rootDataModel);
@@ -83,15 +83,15 @@ namespace AMDEVIT.Trees.TestConsole.Tests
         {
             if (this.tree != null)
             {
-                SortedList<int, NTreeNode<TestDataModel>> sortedTraversalList = this.tree.LevelOrderTraversal();
+                SortedList<int, INTreeNode<TestDataModel>> sortedTraversalList = this.tree.LevelOrderTraversal();
                 TestDataModel searchDataModel;
                 TreeSearchOptions searchOptions;
-                NTreeNode<TestDataModel>[] foundNodes;
+                INTreeNode<TestDataModel>[] foundNodes;
                 int searchElementIndex;
 
                 if (sortedTraversalList != null)
                 {
-                    foreach(KeyValuePair<int, NTreeNode<TestDataModel>> currentElement in sortedTraversalList)
+                    foreach(KeyValuePair<int, INTreeNode<TestDataModel>> currentElement in sortedTraversalList)
                     {
                         Console.WriteLine($"Index: {currentElement.Key}, Data {currentElement.Value.Value?.ToString()}");
                     }
