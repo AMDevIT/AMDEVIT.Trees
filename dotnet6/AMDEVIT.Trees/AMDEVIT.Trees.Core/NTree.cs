@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace AMDEVIT.Trees.Core
 {
-    public class NTree<T>
-       where T : class
+    public class NTree<T> 
+        : INTree<T> 
+        where T : class
     {
         #region Fields
 
