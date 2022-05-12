@@ -6,21 +6,25 @@ using System.Threading.Tasks;
 
 namespace AMDEVIT.Trees.Core
 {
-    public interface IBTreeNode<T>
-        : ITreeNode<T>        
-        where T : class 
+    public interface ITreeNode<T>
     {
         #region Properties
 
-        IBTreeNode<T> Left
+        T Value
         {
             get;
         }
 
-        IBTreeNode<T> Right
+        ITreeNode<T> Parent
         {
             get;
         }
+
+        #endregion
+
+        #region Methods
+
+        ITree<T> CreateSubTree();
 
         #endregion
     }

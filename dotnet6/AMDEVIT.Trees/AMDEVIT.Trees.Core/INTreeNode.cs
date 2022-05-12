@@ -1,6 +1,7 @@
 ﻿namespace AMDEVIT.Trees.Core
 {
     public interface INTreeNode<T>
+        : ITreeNode<T>
        where T : class
     {
         #region Properties
@@ -8,18 +9,8 @@
         INTreeNode<T>[] Children
         {
             get;
-        }
-
-        INTreeNode<T> Parent
-        {
-            get;
-        }
-
-        T Value
-        {
-            get;
-        }
-
+        }        
+        
         #endregion
 
         #region Methods

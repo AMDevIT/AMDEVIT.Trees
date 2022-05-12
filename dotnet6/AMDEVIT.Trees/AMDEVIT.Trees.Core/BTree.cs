@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace AMDEVIT.Trees.Core
 {
     public class BTree<T>
+        : ITree<T>
         where T : class
     {
         #region Fields
@@ -17,7 +18,7 @@ namespace AMDEVIT.Trees.Core
 
         #region Properties
 
-        public IBTreeNode<T> Root
+        public ITreeNode<T> Root
         {
             get
             {
@@ -25,7 +26,13 @@ namespace AMDEVIT.Trees.Core
             }
             protected set
             {
-                this.root = value;
+                IBTreeNode<T> newValue;
+
+                if (value != null && value is not IBTreeNode<T>)
+                    throw new InvalidOperationException("Value must be a BTree node");
+
+                newValue = value as IBTreeNode<T>;
+                this.root = newValue;                
             }
         }
 

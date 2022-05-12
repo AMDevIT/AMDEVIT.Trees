@@ -2,15 +2,12 @@
 
 namespace AMDEVIT.Trees.Core
 {
-    public interface INTree<T> where T : class
+    public interface INTree<T> 
+        : ITree<T>
+        where T : class
     {
         #region Properties
-
-        INTreeNode<T> Root 
-        { 
-            get; 
-        }
-
+       
         #endregion
 
         #region Methods

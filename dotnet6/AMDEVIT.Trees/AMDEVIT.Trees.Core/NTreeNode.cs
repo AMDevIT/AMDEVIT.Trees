@@ -17,7 +17,7 @@ namespace AMDEVIT.Trees.Core
 
         #region Properties
 
-        public INTreeNode<T> Parent
+        public ITreeNode<T> Parent
         {
             get
             {
@@ -25,7 +25,13 @@ namespace AMDEVIT.Trees.Core
             }
             protected set
             {
-                this.parent = value;
+                INTreeNode<T> newValue;
+
+                if (value != null && value is not INTreeNode<T>)
+                    throw new InvalidOperationException("Value must be a NTree node");
+
+                newValue = value as INTreeNode<T>;
+                this.parent = newValue;
             }
         }
 
@@ -178,6 +184,11 @@ namespace AMDEVIT.Trees.Core
             }
 
             return result;
+        }
+
+        public ITree<T> CreateSubTree()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

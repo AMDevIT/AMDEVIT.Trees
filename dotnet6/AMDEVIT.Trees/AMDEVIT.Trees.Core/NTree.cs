@@ -15,11 +15,21 @@ namespace AMDEVIT.Trees.Core
 
         #region Properties
 
-        public INTreeNode<T> Root
+        public ITreeNode<T> Root
         {
             get
             {
                 return this.root;
+            }
+            protected set
+            {
+                INTreeNode<T> newValue;
+
+                if (value != null && value is not INTreeNode<T>)
+                    throw new InvalidOperationException("Value must be a NTree node");
+
+                newValue = value as INTreeNode<T>;
+                this.root = newValue;
             }
         }
 
