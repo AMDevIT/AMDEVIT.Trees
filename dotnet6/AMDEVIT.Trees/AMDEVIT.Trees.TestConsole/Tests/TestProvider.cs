@@ -1,10 +1,5 @@
 ﻿using AMDEVIT.Trees.Core;
 using AMDEVIT.Trees.TestConsole.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AMDEVIT.Trees.TestConsole.Tests
 {
@@ -34,7 +29,7 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             INTreeNode<TestDataModel> h1l3Node;
             INTreeNode<TestDataModel> h2l1Node;
             INTreeNode<TestDataModel> h2l2Node;            
-            List<INTreeNode<TestDataModel>> nNodeList = new List<INTreeNode<TestDataModel>>();
+            List<ITreeNode<TestDataModel>> nNodeList = new List<ITreeNode<TestDataModel>>();
 
 
             this.tree = NTree<TestDataModel>.Create(rootDataModel);
@@ -43,9 +38,9 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             h1l2 = new TestDataModel("Height 1, leaf 2");
             h1l3 = new TestDataModel("Height 1, leaf 3");
 
-            h1l1Node = this.tree.AddNode(this.tree.Root, h1l1);
-            h1l2Node = this.tree.AddNode(this.tree.Root, h1l2);
-            h1l3Node = this.tree.AddNode(this.tree.Root, h1l3);
+            h1l1Node = this.tree.AddNode((INTreeNode<TestDataModel>)this.tree.Root, h1l1);
+            h1l2Node = this.tree.AddNode((INTreeNode<TestDataModel>)this.tree.Root, h1l2);
+            h1l3Node = this.tree.AddNode((INTreeNode<TestDataModel>)this.tree.Root, h1l3);
 
             this.testData.Add(h1l1);
             this.testData.Add(h1l2);
@@ -55,8 +50,8 @@ namespace AMDEVIT.Trees.TestConsole.Tests
             h2l1 = new TestDataModel("Height 2, leaf 1");
             h2l2 = new TestDataModel("Height 2, leaf 2");
 
-            h2l1Node = this.tree.AddNode(h1l1Node, h2l1);            
-            h2l2Node = this.tree.AddNode(h1l1Node, h2l2);
+            h2l1Node = this.tree.AddNode((INTreeNode<TestDataModel>)h1l1Node, h2l1);            
+            h2l2Node = this.tree.AddNode((INTreeNode<TestDataModel>)h1l1Node, h2l2);
 
             this.testData.Add(h2l1);
             this.testData.Add(h2l2);
@@ -66,7 +61,7 @@ namespace AMDEVIT.Trees.TestConsole.Tests
 
             // H = 0
 
-            this.tree.AddNode(this.tree.Root, hnln);
+            this.tree.AddNode((INTreeNode<TestDataModel>)this.tree.Root, hnln);
 
             // H = 1
 

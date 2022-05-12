@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 namespace AMDEVIT.Trees.Core
 {
     public interface IBTreeNode<T>
+        : ITreeNode<T>        
         where T : class 
     {
         #region Properties
 
-        IBTreeNode<T> Parent
+        IBTreeNode<T> Left
         {
             get;
         }
 
-        T Value
+        IBTreeNode<T> Right
         {
             get;
         }
