@@ -40,6 +40,8 @@ namespace AMDEVIT.Trees.Tests
         [TestInitialize]        
         public void InitializeNTree()
         {
+            Console.WriteLine("Initializing values.");
+
             // Tree:
             //
             //          Root Node
@@ -84,8 +86,8 @@ namespace AMDEVIT.Trees.Tests
             this.mNode = this.nTree.AddNode(iNode, new IDDescriptionDataModel("M"));
         }
 
-        [TestMethod]
-        public void ValidateNodeDataComparison()
+        [TestMethod("Validate node data comparison using equals.")]
+        public void Test1ValidateNodeDataComparison()
         {
             IDDescriptionDataModel hReferenceValue = new IDDescriptionDataModel(0, "H");
             IDDescriptionDataModel lReferenceValue = new IDDescriptionDataModel(0, "L");
@@ -112,8 +114,8 @@ namespace AMDEVIT.Trees.Tests
 
         }
 
-        [TestMethod]
-        public void NavigateTree()
+        [TestMethod("Navigate full tree using known traversal algorithms.")]
+        public void Test2NavigateTree()
         {
             TraversedItem<IDDescriptionDataModel>[] traversedItems;
 
@@ -172,8 +174,8 @@ namespace AMDEVIT.Trees.Tests
             }            
         }
 
-        [TestMethod]
-        public void SplitIntoSubTree()
+        [TestMethod("Split the main tree into two subtree.")]
+        public void Test3SplitIntoSubTree()
         {
             ITree<IDDescriptionDataModel>? nodeESubTree = null;
             ITree<IDDescriptionDataModel>? nodeISubTree = null;            

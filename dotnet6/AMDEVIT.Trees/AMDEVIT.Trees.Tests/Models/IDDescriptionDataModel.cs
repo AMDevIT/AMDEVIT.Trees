@@ -57,11 +57,16 @@
             if (Object.ReferenceEquals(this, other))
                 return true;
 
-            if (other == null)
-                return false;
 
-            if (this.Id == other.Id &&
-                this.Description.Equals(other.Description))
+            // Why if I do:
+            // if (other == null)
+            // return false 
+            //
+            // I get an AccessViolation exception?
+
+
+            if (this.Id == other?.Id &&
+                this.Description.Equals(other?.Description))
                 return true;
             
             return false;
@@ -73,7 +78,7 @@
 
             hash = base.GetHashCode() ^
                    this.Id.GetHashCode() ^
-                   this.Description.GetHashCode();
+                   (this.Description == null ? 0 :  this.Description.GetHashCode());
 
             return hash;
         }
