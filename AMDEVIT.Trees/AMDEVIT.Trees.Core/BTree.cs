@@ -29,17 +29,22 @@ namespace AMDEVIT.Trees.Core
             {
                 IBTreeNode<T> newValue;
 
+#if NETSTANDARD
                 if (value != null && value.GetType() != typeof(IBTreeNode<T>))
                     throw new InvalidOperationException("Value must be a BTree node");
+#else
+                if (value != null && value is not IBTreeNode<T>)
+                    throw new InvalidOperationException("Value must be a BTree node");
+#endif
 
                 newValue = value as IBTreeNode<T>;
                 this.root = newValue;                
             }
         }
 
-        #endregion
+#endregion
 
-        #region .ctor
+#region .ctor
 
         public BTree(T data)
         {
@@ -78,6 +83,6 @@ namespace AMDEVIT.Trees.Core
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
     }
 }

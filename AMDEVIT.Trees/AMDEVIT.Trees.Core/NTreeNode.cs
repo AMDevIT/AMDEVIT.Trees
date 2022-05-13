@@ -27,8 +27,13 @@ namespace AMDEVIT.Trees.Core
             {
                 INTreeNode<T> newValue;
 
+#if NETSTANDARD
+                if (value != null && value.GetType() != typeof(IBTreeNode<T>))
+                    throw new InvalidOperationException("Value must be a BTree node");
+#else
                 if (value != null && value is not INTreeNode<T>)
                     throw new InvalidOperationException("Value must be a NTree node");
+#endif
 
                 newValue = value as INTreeNode<T>;
                 this.parent = newValue;
@@ -58,9 +63,9 @@ namespace AMDEVIT.Trees.Core
             }
         }
 
-        #endregion
+#endregion
 
-        #region .ctor
+#region .ctor
 
         public NTreeNode(T value)
             : this(value, null)
@@ -77,9 +82,9 @@ namespace AMDEVIT.Trees.Core
                 parent.AttachChild(this);
         }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
 
         public virtual INTreeNode<T> AddChild(T value)
         {
@@ -264,6 +269,6 @@ namespace AMDEVIT.Trees.Core
             return subTree;
         }
 
-        #endregion
+#endregion
     }
 }

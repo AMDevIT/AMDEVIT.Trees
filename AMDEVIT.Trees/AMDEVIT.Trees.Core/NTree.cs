@@ -26,17 +26,22 @@ namespace AMDEVIT.Trees.Core
             {
                 INTreeNode<T> newValue;
 
+#if NETSTANDARD
+                if (value != null && value.GetType() != typeof(IBTreeNode<T>))
+                    throw new InvalidOperationException("Value must be a BTree node");
+#else
                 if (value != null && value is not INTreeNode<T>)
                     throw new InvalidOperationException("Value must be a NTree node");
+#endif
 
                 newValue = value as INTreeNode<T>;
                 this.root = newValue;
             }
         }
 
-        #endregion
+#endregion
 
-        #region .ctor
+#region .ctor
 
         public NTree()
         {
@@ -65,11 +70,11 @@ namespace AMDEVIT.Trees.Core
             this.root = root;
         }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
 
-        #region Manipulation
+#region Manipulation
 
         public virtual INTreeNode<T> AddNode(T data, AttachMode attachMode = AttachMode.AttachToLastLevel)
         {
@@ -178,9 +183,9 @@ namespace AMDEVIT.Trees.Core
             return result;
         }
 
-        #endregion
+#endregion
 
-        #region Traversal and search
+#region Traversal and search
 
         public ITreeNode<T>[] Search(T data, TreeSearchOptions options)
         {
@@ -327,7 +332,7 @@ namespace AMDEVIT.Trees.Core
             return sortedNodes.ToArray();
         }
 
-        #endregion
+#endregion
 
         public static NTree<T> Create(T data)
         {
@@ -340,6 +345,6 @@ namespace AMDEVIT.Trees.Core
             return tree;
         }
 
-        #endregion
+#endregion
     }
 }
