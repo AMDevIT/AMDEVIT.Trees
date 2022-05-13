@@ -5,6 +5,11 @@
 	  <TargetFrameworks>net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/AMDevIT/AMDEVIT.Trees</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AMDevIT/AMDEVIT.Trees.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>trees;btree;ntree;tree</PackageTags>
   </PropertyGroup>
 
 </Project>
