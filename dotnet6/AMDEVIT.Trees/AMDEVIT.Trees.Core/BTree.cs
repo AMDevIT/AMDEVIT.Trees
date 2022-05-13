@@ -68,6 +68,16 @@ namespace AMDEVIT.Trees.Core
             throw new NotImplementedException();
         }
 
+        public ITreeNode<T>[] Search(T data, TreeSearchOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITreeNode<T>[] Search(T data, TreeSearchOptions options, Func<T, bool> searchPattern)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

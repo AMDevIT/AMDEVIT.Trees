@@ -82,7 +82,7 @@ namespace AMDEVIT.Trees.TestConsole.Tests
                 TraversedItem<TestDataModel>[] sortedTraversalList = this.tree.LevelOrderTraversal();
                 TestDataModel searchDataModel;
                 TreeSearchOptions searchOptions;
-                INTreeNode<TestDataModel>[] foundNodes;
+                ITreeNode<TestDataModel>[] foundNodes;
                 int searchElementIndex;
 
                 if (sortedTraversalList != null)

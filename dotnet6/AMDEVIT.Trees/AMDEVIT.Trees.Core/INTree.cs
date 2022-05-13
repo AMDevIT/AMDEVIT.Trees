@@ -15,8 +15,7 @@ namespace AMDEVIT.Trees.Core
 
         INTreeNode<T> AddNode(INTreeNode<T> parent, T data);
         INTreeNode<T> AddNode(T data, AttachMode attachMode);        
-        bool RemoveNode(INTreeNode<T> parent, INTreeNode<T> child);
-        INTreeNode<T>[] Search(T data, TreeSearchOptions options);
+        bool RemoveNode(INTreeNode<T> parent, INTreeNode<T> child);        
 
         #endregion
     }

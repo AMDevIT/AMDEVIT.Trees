@@ -1,4 +1,5 @@
 ﻿using AMDEVIT.Trees.Core.Traversal;
+using System;
 
 namespace AMDEVIT.Trees.Core
 {
@@ -16,6 +17,8 @@ namespace AMDEVIT.Trees.Core
         #region Methods
 
         TraversedItem<T>[] LevelOrderTraversal();
+        ITreeNode<T>[] Search(T data, TreeSearchOptions options);
+        ITreeNode<T>[] Search(T data, TreeSearchOptions options, Func<T, bool> searchPattern);
 
         #endregion
     }

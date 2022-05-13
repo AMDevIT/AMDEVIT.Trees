@@ -182,7 +182,15 @@ namespace AMDEVIT.Trees.Core
 
         #region Traversal and search
 
-        public INTreeNode<T>[] Search(T data, TreeSearchOptions options)
+        public ITreeNode<T>[] Search(T data, TreeSearchOptions options)
+        {
+            return this.Search(data, options, (T nodeValue) =>
+            {
+                return nodeValue.Equals(data);
+            });
+        }
+
+        public ITreeNode<T>[] Search(T data, TreeSearchOptions options, Func<T, bool> searchPattern)
         {
             TraversedItem<T>[] traversedItems;
             List<INTreeNode<T>> foundList = new List<INTreeNode<T>>();
@@ -191,7 +199,13 @@ namespace AMDEVIT.Trees.Core
             if (options == null)
                 options = new TreeSearchOptions();
 
-            traversedItems = this.LevelOrderTraversal(true, data);
+            traversedItems = this.LevelOrderTraversal((INTreeNode<T> currentNode) =>
+            {
+                if (searchPattern == null)
+                    return true;
+
+                return searchPattern.Invoke(currentNode?.Value);
+            });
 
             if (traversedItems != null)
             {
@@ -211,9 +225,9 @@ namespace AMDEVIT.Trees.Core
                         break;
 
                     case TreeSearchMode.Last:
-                        if (traversedItems.Length> 0)
+                        if (traversedItems.Length > 0)
                         {
-                            int lastIndex = traversedItems.Length- 1;
+                            int lastIndex = traversedItems.Length - 1;
                             foundList.Add((INTreeNode<T>)traversedItems[lastIndex].Node);
                         }
                         break;
@@ -228,11 +242,12 @@ namespace AMDEVIT.Trees.Core
         {
             TraversedItem<T>[] sortedNodes;
 
-            sortedNodes = this.LevelOrderTraversal(false, null);
+            sortedNodes = this.LevelOrderTraversal(null);
             return sortedNodes;
         }
 
-        protected virtual TraversedItem<T>[] LevelOrderTraversal(bool search, T value)
+        // protected virtual TraversedItem<T>[] LevelOrderTraversal(bool search, T value, Func<T, INTreeNode<T>> searchPatternHandler)
+        protected virtual TraversedItem<T>[] LevelOrderTraversal(Func<INTreeNode<T>, bool> searchPatternHandler)
         {
             List<TraversedItem<T>> sortedNodes = new List<TraversedItem<T>>();
             Queue<TraversalStackItem<T>> traversalQueue;
@@ -260,22 +275,25 @@ namespace AMDEVIT.Trees.Core
 
                     if (currentNode != null)
                     {
-                        bool found = false;
+                        bool found;
 
-                        if (search == false)
-                            found = true;
+                        if (searchPatternHandler != null)
+                            found = searchPatternHandler(currentNode);
                         else
-                        {
-                            if (currentNode.Value.Equals(value))
-                                found = true;
-                        }
+                            found = true;                    
 
-                        if (found == true)
-                        {
-                            // sortedNodes.Add(level, currentNode);
-                            // level++;
-                            sortedNodes.Add(new TraversedItem<T>(currentNode, currentTraversalStackItem.Level));
-                        }
+                        //if (search == false)
+                        //    found = true;
+                        //else
+                        //{
+                        // Search using search pattern handler
+
+                        // if (currentNode.Value.Equals(value))
+                        //    found = true;                            
+                        //}
+
+                        if (found == true)                                                    
+                            sortedNodes.Add(new TraversedItem<T>(currentNode, currentTraversalStackItem.Level));                        
 
                         for (int k = 0; k < currentNode.Children.Length; k++)
                         {
