@@ -13,6 +13,12 @@ namespace AMDEVIT.Trees.Core.Traversal
             protected set;
         }
 
+        public int Iteraction
+        {
+            get;
+            protected set;
+        }
+
         public ITreeNode<T> Node
         {
             get;
@@ -23,10 +29,11 @@ namespace AMDEVIT.Trees.Core.Traversal
 
         #region .ctor
 
-        public TraversedItem (ITreeNode<T> node, int level)
+        public TraversedItem (ITreeNode<T> node, int level, int iteraction)
         {
             this.Node = node;
             this.Level = level;
+            this.Iteraction = iteraction;
         }
 
         #endregion
@@ -74,7 +81,7 @@ namespace AMDEVIT.Trees.Core.Traversal
 
         public override string ToString()
         {
-            return $"Level: {this.Level} Node: {this.Node}";
+            return $"Level: {this.Level} Iteraction: {this.Iteraction} Node: {this.Node}";
         }
 
         #endregion        

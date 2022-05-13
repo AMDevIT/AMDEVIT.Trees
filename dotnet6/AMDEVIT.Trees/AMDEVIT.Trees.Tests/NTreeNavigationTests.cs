@@ -296,7 +296,7 @@ namespace AMDEVIT.Trees.Tests
             searchTimer.Reset();
         }
 
-        [TestMethod("High volume random search test")]
+        [TestMethod("High volume random search test")]        
         public void Test5HighVolumeRandomSearchTest()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -307,8 +307,8 @@ namespace AMDEVIT.Trees.Tests
             INTreeNode<IDDescriptionDataModel> searchNode;
             NTree <IDDescriptionDataModel> highVolumTestTree;
             int numberOfNodes;
-            int maxNodes = 5000;
             int searchIndex;
+            int maxNodes = 20000;
 
             Console.WriteLine("Initializing high volume tree.");
             highVolumTestTree = new NTree<IDDescriptionDataModel>(new IDDescriptionDataModel(0, "Root node"));

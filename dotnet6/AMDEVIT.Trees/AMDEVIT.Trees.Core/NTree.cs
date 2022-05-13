@@ -199,13 +199,17 @@ namespace AMDEVIT.Trees.Core
             if (options == null)
                 options = new TreeSearchOptions();
 
-            traversedItems = this.LevelOrderTraversal((INTreeNode<T> currentNode) =>
+            if (searchPattern == null)
+                traversedItems = this.LevelOrderTraversal(null, null);
+            else
             {
-                if (searchPattern == null)
-                    return true;
 
-                return searchPattern.Invoke(currentNode?.Value);
-            });
+                traversedItems = this.LevelOrderTraversal((INTreeNode<T> currentNode) =>
+                {             
+                    return searchPattern.Invoke(currentNode?.Value);
+                },
+                options.Mode);
+            }
 
             if (traversedItems != null)
             {
@@ -242,16 +246,17 @@ namespace AMDEVIT.Trees.Core
         {
             TraversedItem<T>[] sortedNodes;
 
-            sortedNodes = this.LevelOrderTraversal(null);
+            sortedNodes = this.LevelOrderTraversal(null, null);
             return sortedNodes;
         }
 
         // protected virtual TraversedItem<T>[] LevelOrderTraversal(bool search, T value, Func<T, INTreeNode<T>> searchPatternHandler)
-        protected virtual TraversedItem<T>[] LevelOrderTraversal(Func<INTreeNode<T>, bool> searchPatternHandler)
+        protected virtual TraversedItem<T>[] LevelOrderTraversal(Func<INTreeNode<T>, bool> searchPatternHandler, TreeSearchMode? searchMode)
         {
             List<TraversedItem<T>> sortedNodes = new List<TraversedItem<T>>();
             Queue<TraversalStackItem<T>> traversalQueue;
             INTreeNode<T> currentRoot;
+            int iteractions = 0;
             // int level = 0;
 
             if (this.Root == null)
@@ -263,13 +268,14 @@ namespace AMDEVIT.Trees.Core
 
             while (traversalQueue.Count != 0)
             {
-                int queueSize = traversalQueue.Count;
+                int queueSize = traversalQueue.Count;                
 
                 for (int i = 0; i < queueSize; i++)
                 {
                     TraversalStackItem<T> currentTraversalStackItem;
                     INTreeNode<T> currentNode;
 
+                    iteractions++;
                     currentTraversalStackItem = traversalQueue.Dequeue();
                     currentNode = (INTreeNode<T>)currentTraversalStackItem.Node;
 
@@ -280,7 +286,7 @@ namespace AMDEVIT.Trees.Core
                         if (searchPatternHandler != null)
                             found = searchPatternHandler(currentNode);
                         else
-                            found = true;                    
+                            found = true;
 
                         //if (search == false)
                         //    found = true;
@@ -292,8 +298,16 @@ namespace AMDEVIT.Trees.Core
                         //    found = true;                            
                         //}
 
-                        if (found == true)                                                    
-                            sortedNodes.Add(new TraversedItem<T>(currentNode, currentTraversalStackItem.Level));                        
+                        if (found == true)
+                        {
+                            sortedNodes.Add(new TraversedItem<T>(currentNode, currentTraversalStackItem.Level, iteractions));
+                            if (searchPatternHandler != null && searchMode.HasValue && searchMode == TreeSearchMode.First)
+                            {
+                                // Break out the while and the for.
+                                traversalQueue.Clear();
+                                break;                                
+                            }
+                        }
 
                         for (int k = 0; k < currentNode.Children.Length; k++)
                         {
