@@ -5,7 +5,7 @@ using AMDEVIT.Trees.Tests.Models;
 namespace AMDEVIT.Trees.Tests
 {
     [TestClass]
-    public class NTreeNavigation
+    public class NTreeNavigationTests
     {
         #region Fields
 
@@ -37,7 +37,7 @@ namespace AMDEVIT.Trees.Tests
 
         #region Methods
 
-        [TestInitialize]
+        [TestInitialize]        
         public void InitializeNTree()
         {
             // Tree:
@@ -90,13 +90,16 @@ namespace AMDEVIT.Trees.Tests
             IDDescriptionDataModel hReferenceValue = new IDDescriptionDataModel(0, "H");
             IDDescriptionDataModel lReferenceValue = new IDDescriptionDataModel(0, "L");
             IDDescriptionDataModel mReferenceValue = new IDDescriptionDataModel(0, "M");
+            bool referenceCheck;
 
             // Check for data comparison.
             Assert.IsNotNull(this.hNode, "H Node is actually null.");
             Assert.IsNotNull(this.lNode, "L Node is actually null.");
             Assert.IsNotNull(this.mNode, "M Node is actually null.");
 
-            bool temp = hReferenceValue.Equals(this.hNode.Value);
+            // Referencecheck for Equals method.
+            referenceCheck = hReferenceValue.Equals(this.hNode.Value);
+            Assert.IsTrue(referenceCheck, "Reference check for equals method is false.");
 
             Assert.AreEqual(hReferenceValue, this.hNode.Value, "H Node value is not equal to H reference value");
             Assert.AreEqual(lReferenceValue, this.lNode.Value, "L Node value is not equal to L reference value");
