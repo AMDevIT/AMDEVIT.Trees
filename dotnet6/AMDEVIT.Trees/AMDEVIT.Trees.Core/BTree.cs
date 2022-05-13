@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMDEVIT.Trees.Core.Traversal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,6 +61,11 @@ namespace AMDEVIT.Trees.Core
                 throw new InvalidOperationException("Provided node element already assigned to a parent.");
 
             this.root = root;
+        }
+
+        public TraversedItem<T>[] LevelOrderTraversal()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AMDEVIT.Trees.Core.Traversal;
+using System.Collections.Generic;
 
 namespace AMDEVIT.Trees.Core
 {
@@ -13,8 +14,7 @@ namespace AMDEVIT.Trees.Core
         #region Methods
 
         INTreeNode<T> AddNode(INTreeNode<T> parent, T data);
-        INTreeNode<T> AddNode(T data);
-        SortedList<int, INTreeNode<T>> LevelOrderTraversal();
+        INTreeNode<T> AddNode(T data, AttachMode attachMode);        
         bool RemoveNode(INTreeNode<T> parent, INTreeNode<T> child);
         INTreeNode<T>[] Search(T data, TreeSearchOptions options);
 

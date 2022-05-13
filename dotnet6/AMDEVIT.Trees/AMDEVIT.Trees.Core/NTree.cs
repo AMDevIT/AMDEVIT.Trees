@@ -71,7 +71,7 @@ namespace AMDEVIT.Trees.Core
 
         #region Manipulation
 
-        public virtual INTreeNode<T> AddNode(T data)
+        public virtual INTreeNode<T> AddNode(T data, AttachMode attachMode = AttachMode.AttachToLastLevel)
         {
             INTreeNode<T> newNode = null;
 
@@ -85,18 +85,32 @@ namespace AMDEVIT.Trees.Core
             }
             else
             {
-                SortedList<int, INTreeNode<T>> levelTraversedElements;
-
-                levelTraversedElements = this.LevelOrderTraversal();
-
-                if (levelTraversedElements != null && levelTraversedElements.Count != 0)
+                switch (attachMode)
                 {
-                    int lastElementIndex = levelTraversedElements.Count;
-                    INTreeNode<T> lastElement = levelTraversedElements[lastElementIndex];
+                    case AttachMode.AttachToRoot:
+                        {
+                            INTreeNode<T> currentRoot = (INTreeNode <T>) this.Root;
+                            newNode = currentRoot.AddChild(data);
+                        }
+                        break;
 
-                    if (lastElement != null)
-                        newNode = lastElement.AddChild(data);
-                }
+                    case AttachMode.AttachToLastLevel:
+                        {
+                            TraversedItem<T>[] levelTraversedElements;
+
+                            levelTraversedElements = this.LevelOrderTraversal();
+
+                            if (levelTraversedElements != null && levelTraversedElements.Length != 0)
+                            {
+                                int lastElementIndex = levelTraversedElements.Length - 1;
+                                INTreeNode<T> lastElement = (INTreeNode<T>)levelTraversedElements[lastElementIndex].Node;
+
+                                if (lastElement != null)
+                                    newNode = lastElement.AddChild(data);
+                            }                            
+                        }
+                        break;
+                }                
             }
 
             return newNode;
@@ -116,14 +130,14 @@ namespace AMDEVIT.Trees.Core
             }
             else
             {
-                SortedList<int, INTreeNode<T>> levelTraversedElements;
+                TraversedItem<T>[] levelTraversedElements;
 
                 levelTraversedElements = this.LevelOrderTraversal();
 
-                if (levelTraversedElements != null && levelTraversedElements.Count != 0)
+                if (levelTraversedElements != null && levelTraversedElements.Length != 0)
                 {
-                    int lastElementIndex = levelTraversedElements.Count;
-                    INTreeNode<T> lastElement = levelTraversedElements[lastElementIndex];
+                    int lastElementIndex = levelTraversedElements.Length - 1;
+                    INTreeNode<T> lastElement = (INTreeNode<T>) levelTraversedElements[lastElementIndex];
 
                     if (lastElement != null)
                     {
@@ -170,33 +184,37 @@ namespace AMDEVIT.Trees.Core
 
         public INTreeNode<T>[] Search(T data, TreeSearchOptions options)
         {
-            SortedList<int, INTreeNode<T>> sortedList;
+            TraversedItem<T>[] traversedItems;
             List<INTreeNode<T>> foundList = new List<INTreeNode<T>>();
             INTreeNode<T>[] foundElements;
 
             if (options == null)
                 options = new TreeSearchOptions();
 
-            sortedList = this.LevelOrderTraversal(true, data);
+            traversedItems = this.LevelOrderTraversal(true, data);
 
-            if (sortedList != null)
+            if (traversedItems != null)
             {
                 switch (options.Mode)
                 {
                     case TreeSearchMode.AllMatches:
-                        foundList.AddRange(sortedList.Values);
+                        for (int i = 0; i < traversedItems.Length; i++)
+                        {
+                            TraversedItem<T> item = traversedItems[i];
+                            foundList.Add((INTreeNode<T>)item.Node);
+                        }
                         break;
 
                     case TreeSearchMode.First:
-                        if (sortedList.Count > 0)
-                            foundList.Add(sortedList[0]);
+                        if (traversedItems.Length > 0)
+                            foundList.Add((INTreeNode<T>)traversedItems[0].Node);
                         break;
 
                     case TreeSearchMode.Last:
-                        if (sortedList.Count > 0)
+                        if (traversedItems.Length> 0)
                         {
-                            int lastIndex = sortedList.Count - 1;
-                            foundList.Add(sortedList[lastIndex]);
+                            int lastIndex = traversedItems.Length- 1;
+                            foundList.Add((INTreeNode<T>)traversedItems[lastIndex].Node);
                         }
                         break;
                 }
@@ -206,23 +224,23 @@ namespace AMDEVIT.Trees.Core
             return foundElements;
         }
 
-        public SortedList<int, INTreeNode<T>> LevelOrderTraversal()
+        public TraversedItem<T>[] LevelOrderTraversal()
         {
-            SortedList<int, INTreeNode<T>> sortedNodes;
+            TraversedItem<T>[] sortedNodes;
 
             sortedNodes = this.LevelOrderTraversal(false, null);
             return sortedNodes;
         }
 
-        protected virtual SortedList<int, INTreeNode<T>> LevelOrderTraversal(bool search, T value)
+        protected virtual TraversedItem<T>[] LevelOrderTraversal(bool search, T value)
         {
-            SortedList<int, INTreeNode<T>> sortedNodes = new SortedList<int, INTreeNode<T>>();            
+            List<TraversedItem<T>> sortedNodes = new List<TraversedItem<T>>();
             Queue<TraversalStackItem<T>> traversalQueue;
             INTreeNode<T> currentRoot;
             // int level = 0;
 
             if (this.Root == null)
-                return sortedNodes;
+                return sortedNodes.ToArray();
 
             currentRoot = (INTreeNode<T>)this.Root;
             traversalQueue = new Queue<TraversalStackItem<T>>();            
@@ -256,7 +274,7 @@ namespace AMDEVIT.Trees.Core
                         {
                             // sortedNodes.Add(level, currentNode);
                             // level++;
-                            sortedNodes.Add(currentTraversalStackItem.Level, currentNode);
+                            sortedNodes.Add(new TraversedItem<T>(currentNode, currentTraversalStackItem.Level));
                         }
 
                         for (int k = 0; k < currentNode.Children.Length; k++)
@@ -273,7 +291,8 @@ namespace AMDEVIT.Trees.Core
                 }
             }
 
-            return sortedNodes;
+            sortedNodes.Sort();             // Sort elements first.
+            return sortedNodes.ToArray();
         }
 
         #endregion

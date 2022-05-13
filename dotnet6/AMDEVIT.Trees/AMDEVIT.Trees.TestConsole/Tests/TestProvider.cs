@@ -1,4 +1,5 @@
 ﻿using AMDEVIT.Trees.Core;
+using AMDEVIT.Trees.Core.Traversal;
 using AMDEVIT.Trees.TestConsole.Models;
 
 namespace AMDEVIT.Trees.TestConsole.Tests
@@ -78,7 +79,7 @@ namespace AMDEVIT.Trees.TestConsole.Tests
         {
             if (this.tree != null)
             {
-                SortedList<int, INTreeNode<TestDataModel>> sortedTraversalList = this.tree.LevelOrderTraversal();
+                TraversedItem<TestDataModel>[] sortedTraversalList = this.tree.LevelOrderTraversal();
                 TestDataModel searchDataModel;
                 TreeSearchOptions searchOptions;
                 INTreeNode<TestDataModel>[] foundNodes;
@@ -86,9 +87,10 @@ namespace AMDEVIT.Trees.TestConsole.Tests
 
                 if (sortedTraversalList != null)
                 {
-                    foreach(KeyValuePair<int, INTreeNode<TestDataModel>> currentElement in sortedTraversalList)
+                    for (int i = 0; i < sortedTraversalList.Length; i++)
                     {
-                        Console.WriteLine($"Index: {currentElement.Key}, Data {currentElement.Value.Value?.ToString()}");
+                        TraversedItem<TestDataModel> currentElement = sortedTraversalList[i];
+                        Console.WriteLine($"Index: {currentElement.Level}, Data {currentElement.Node.Value?.ToString()}");
                     }
                 }
 
