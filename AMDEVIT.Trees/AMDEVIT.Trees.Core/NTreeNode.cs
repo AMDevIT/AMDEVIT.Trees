@@ -63,9 +63,9 @@ namespace AMDEVIT.Trees.Core
             }
         }
 
-#endregion
+        #endregion
 
-#region .ctor
+        #region .ctor
 
         public NTreeNode(T value)
             : this(value, null)
@@ -82,9 +82,9 @@ namespace AMDEVIT.Trees.Core
                 parent.AttachChild(this);
         }
 
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
 
         public virtual INTreeNode<T> AddChild(T value)
         {
@@ -211,7 +211,7 @@ namespace AMDEVIT.Trees.Core
 
             traversalQueue = new Queue<SubtreeParameter<T>>();
             rootParameter = new SubtreeParameter<T>(null, this);
-            traversalQueue.Enqueue(rootParameter);            
+            traversalQueue.Enqueue(rootParameter);
 
             while (traversalQueue.Count != 0)
             {
@@ -219,7 +219,7 @@ namespace AMDEVIT.Trees.Core
 
                 for (int i = 0; i < queueSize; i++)
                 {
-                    SubtreeParameter<T> currentSubtreeParameter = traversalQueue.Dequeue();                    
+                    SubtreeParameter<T> currentSubtreeParameter = traversalQueue.Dequeue();
 
                     if (currentSubtreeParameter != null)
                     {
@@ -228,7 +228,7 @@ namespace AMDEVIT.Trees.Core
 
                         if (subTree == null && currentSubtreeParameter.Parent == null)
                         {
-                            INTreeNode<T> currentClone;                            
+                            INTreeNode<T> currentClone;
 
                             currentClone = (INTreeNode<T>)currentNode.Clone();
                             currentParent = currentClone;
@@ -239,7 +239,7 @@ namespace AMDEVIT.Trees.Core
                             if (currentSubtreeParameter.Parent != null)
                             {
                                 // Adding current node as a children.
-                                INTreeNode<T> parentNode = (INTreeNode<T>)currentSubtreeParameter.Parent;                                
+                                INTreeNode<T> parentNode = (INTreeNode<T>)currentSubtreeParameter.Parent;
                                 currentParent = subTree.AddNode(parentNode, currentSubtreeParameter.Current.Value);
                             }
                             else
@@ -269,6 +269,6 @@ namespace AMDEVIT.Trees.Core
             return subTree;
         }
 
-#endregion
+        #endregion
     }
 }
