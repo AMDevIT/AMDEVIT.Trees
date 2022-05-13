@@ -27,7 +27,7 @@ namespace AMDEVIT.Trees.Core
             {
                 INTreeNode<T> newValue;
 
-                if (value != null && value is not INTreeNode<T>)
+                if (value != null && value.GetType() != typeof(INTreeNode<T>))
                     throw new InvalidOperationException("Value must be a NTree node");
 
                 newValue = value as INTreeNode<T>;

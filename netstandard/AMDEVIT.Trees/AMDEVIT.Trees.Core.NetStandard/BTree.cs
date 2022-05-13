@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMDEVIT.Trees.Core.Traversal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace AMDEVIT.Trees.Core
             {
                 IBTreeNode<T> newValue;
 
-                if (value != null && value is not IBTreeNode<T>)
+                if (value != null && value.GetType() != typeof(IBTreeNode<T>))
                     throw new InvalidOperationException("Value must be a BTree node");
 
                 newValue = value as IBTreeNode<T>;
@@ -60,6 +61,21 @@ namespace AMDEVIT.Trees.Core
                 throw new InvalidOperationException("Provided node element already assigned to a parent.");
 
             this.root = root;
+        }
+
+        public TraversedItem<T>[] LevelOrderTraversal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITreeNode<T>[] Search(T data, TreeSearchOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITreeNode<T>[] Search(T data, TreeSearchOptions options, Func<T, bool> searchPattern)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
